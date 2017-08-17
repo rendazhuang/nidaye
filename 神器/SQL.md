@@ -72,10 +72,10 @@ drop table 表名
 insert into 表名(属性，，，)values（每一列的数据）
 ```
 
-重复的一列中所有的东西：distinck depart
+重复的一列中所有的东西：distinct depart
 
 ```
-select distinck depart from 表格
+select distinct depart from 表格
 ```
 
 在一个属性的什么到什么之间的betueen   and
@@ -189,7 +189,7 @@ select 查询列 from 表1 left join 表2 on 连接条件 where
 右外连接
 
 ```
-select 查询列 from 表1 right outer jion 表2 on 连接条件 where 查询条件
+select 查询列 from 表1 right outer join 表2 on 连接条件 where 查询条件
 ```
 
 索引:索引分为普通索引，主键索引和复合索引

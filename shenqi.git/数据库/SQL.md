@@ -1,5 +1,27 @@
 
 
+数据库登录
+
+```
+musql -u 用户名 -p 密码
+```
+
+数据库退出
+
+```
+quit
+```
+
+数据库修改密码
+
+```
+set password for 用户名@localhost = password('新密码');
+```
+
+
+单表的增删查
+============
+
 看标的结构
 
 ```
@@ -30,16 +52,26 @@ alter table 表名 change 旧属性名 新名 新属性
 alter table 表名 modiFY旧属性名 数据类型
 ```
 
+修改字段
+
+```
+String sql="update tue set sname="qiangqiang",ssex='男' where id=? and sname=?";
+把sname改成qiangqiang  ssex改成男
+```
+
+
+
 增加字段
 
 ```
-alter table 表名 ADD属性名1 数据类型 after 属性名2
+alter table 表名 ADD属性名1 数据类型                          after 属性名2
 ```
 
 删除字段
 
 ```
 alter table 表名 drop 属性名
+delete from 表 where 条件
 ```
 
 修改字段的排列位置
@@ -72,10 +104,10 @@ drop table 表名
 insert into 表名(属性，，，)values（每一列的数据）
 ```
 
-重复的一列中所有的东西：distinck depart
+重复的一列中所有的东西：distinct depart
 
 ```
-select distinck depart from 表格
+select distinct depart from 表格
 ```
 
 在一个属性的什么到什么之间的betueen   and
@@ -102,12 +134,6 @@ select count(1)from表格where 条件
 select b.属性,count(1)from表名b where b.属性名 like'以什么开头%' group by b.属性名   having count(1)>=5
  ```
 
-union all
-
-```
-合并俩表，union 过滤掉重复的资料
-```
-
 如果存在
 
 ```
@@ -118,12 +144,6 @@ exists,在条件后使用
 
 ```
 year(now())-year(属性)  age
-```
-
-自增
-
-```
-auto_increment,一般用在主键里面
 ```
 
 总和函数
@@ -150,6 +170,12 @@ select max(属性) from 表格名
 select min(属性) from 表格名
 ```
 
+sum  总和
+
+```
+select sum(工资之类) from 表格名
+```
+
 like
 
 ```
@@ -161,6 +187,38 @@ as
 ```
 creat table 新表格 as select 属性或者* from 有内容的表格：    表示把一个表格的内容及格式弄到另一个新建的表格
 ```
+
+
+表的创建
+===================
+
+外键约束（最少俩表）
+
+```
+create table student(
+	id int primart key,//设置主键
+	name carchar(50) not null,//设为非空
+	gender char(1) default 'M'//性别默认为男
+	depId int,//设置和外检主键一直的类型
+	constraint 外键名
+	foreign key(depId),
+	references department(id)//要约束的表名的键
+	);
+	create table department(
+		id int primary key,
+		dname varchar(50)
+	)
+```
+
+主键约束：primary key          数据唯一且非空
+
+not null:  非空约束
+
+unique：数据唯一
+
+auto_increment:自增
+
+default   :默认值约束  ‘   ’
 
 case
 
@@ -174,10 +232,41 @@ else 后面跟如果不符合上面那些条件的要出的结果
 end 后面跟这一列的属性名
 ```
 
+
+多表操作
+===========
+
+插入外键约束
+
+```
+alter  table 表名 add constraint 外键名 foreign key (did（要约束的键）) references 要约束的表名 (被约束的id键)
+```
+
+不包含：not in
+
+包含: in
+
+union all
+
+```
+
+合并俩表，union 过滤掉重复的资料
+union all  不过滤掉重复的资料
+
+select  union select
+```
+
 内连接
 
 ```
-select 查询列 from 表1 jion 表2 on 连接条件 where 查询条件
+select * from 表1 inner join 表2;//显示俩表的乘积
+select 查询列 from 表1 join 表2 on 连接条件 where 查询条件
+```
+
+自然连接  ：如果俩表中有名称和类型完全一致的列，无需给出主外键关系等式，。会自动找到
+
+```
+select * from 表1 natural join 表2;
 ```
 
 左外连接
@@ -189,7 +278,17 @@ select 查询列 from 表1 left join 表2 on 连接条件 where
 右外连接
 
 ```
-select 查询列 from 表1 right outer jion 表2 on 连接条件 where 查询条件
+select 查询列 from 表1 right outer join 表2 on 连接条件 where 查询条件
+```
+
+子查询
+
+```
+>=any:大于子查询中的最小值
+<any:小于子查询中得最大值
+>=all:大于子查询中的最大值
+<all:小于子查询中的最小值
+select *from emp where 工资 >=any(查询的东西)
 ```
 
 索引:索引分为普通索引，主键索引和复合索引
